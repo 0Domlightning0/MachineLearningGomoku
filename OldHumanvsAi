@@ -1,0 +1,1503 @@
+// Connect 5.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include <iostream>
+#include <string> 
+#include <iostream>
+#include <windows.h>   // WinApi header
+
+
+using namespace std;
+
+int main()
+{
+
+	const int l = 19;
+	const int w = 19;
+	string list[l][w] = {};
+
+	int placex = 0;
+	int placey = 0;
+	bool player = true;
+	string token = "X";
+
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+
+
+
+
+
+
+
+
+	// Header
+	SetConsoleTextAttribute(hConsole, 7);	
+	cout << "   ";
+	for (int i = 1; i < w + 1; i++) {
+		
+		int number = i;
+
+		if (number == 10) {
+			
+			cout << to_string(number) << " ";
+		}
+
+		if (number > 10){
+			
+			cout << " " << to_string(number) << " ";
+		}
+
+		if (number < 10) {
+			
+			cout << " " << to_string(number) << "  ";
+		}
+		
+		
+
+	}
+	cout << endl;
+
+
+
+	
+	// Creating the board
+	for (int i = 0; i < l; i++) {
+
+		for (int j = 0; j < w; j++) {
+			SetConsoleTextAttribute(hConsole, 8);
+			list[i][j] = "[ ]";
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+	// Printing 
+	
+	for (int i = 0; i < l; i++) {
+
+		if (i > 8) {
+			SetConsoleTextAttribute(hConsole, 7);
+			cout << i+1 << " ";
+		}
+		else {
+			SetConsoleTextAttribute(hConsole, 7);
+			cout << " " << i+1 << " ";
+		}
+		
+		for (int j = 0; j < w; j++) {
+			SetConsoleTextAttribute(hConsole, 8);
+			cout << list[i][j] << " ";
+		}
+		cout << endl;
+		cout << endl;
+	}
+
+
+
+
+
+
+
+
+
+
+
+	///////////////////////////////////////
+
+	bool end = false;
+	while (end == false) {
+		if (player == true) {
+			token = "[X]";
+		}
+		else {
+			//token = "[O]";
+		}
+		SetConsoleTextAttribute(hConsole, 7);
+		cout << "X coordinate ";
+		cin >> placex;
+		cout << endl;
+		cout << "Y coordinate ";
+		cin >> placey;
+		cout << endl;
+
+
+		bool check = true;
+
+
+		// Placing
+		if (list[placey - 1][placex - 1] == "[ ]") {
+			list[placey - 1][placex - 1] = token;
+			if (player == true) {
+				player = false;
+			}
+			else {
+				player = true;
+			}
+			check = true;
+		}
+		else {
+			SetConsoleTextAttribute(hConsole, 7);
+			cout << "cant place there, try again" << endl;
+			check = false;
+		}
+
+
+		// Header
+		SetConsoleTextAttribute(hConsole, 7);
+		cout << "   ";
+		for (int i = 1; i < w + 1; i++) {
+
+			int number = i;
+
+			if (number == 10) {
+				cout << to_string(number) << " ";
+			}
+
+			if (number > 10) {
+				cout << " " << to_string(number) << " ";
+			}
+
+			if (number < 10) {
+				cout << " " << to_string(number) << "  ";
+			}
+		}
+		cout << endl;
+
+
+		// Sideways win
+
+		for (int i = 0; i < l; i++) {
+
+			for (int j = 0; j < w - 4; j++) {
+				if (list[i][j] == "[X]" and list[i][j + 1] == "[X]" and list[i][j + 2] == "[X]" and list[i][j + 3] == "[X]" and list[i][j + 4] == "[X]") {
+					end = true;
+					cout << "X win!" << "sideways starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+				if (list[i][j] == "[O]" and list[i][j + 1] == "[O]" and list[i][j + 2] == "[O]" and list[i][j + 3] == "[O]" and list[i][j + 4] == "[O]") {
+					end = true;
+					cout << "O win!" << "sideways starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+			}
+		}
+
+		//Vert win list[y][x]
+		for (int j = 0; j < w; j++) {
+
+			for (int i = 0; i < l - 4; i++) {
+				if (list[i][j] == "[X]" and list[i + 1][j] == "[X]" and list[i + 2][j] == "[X]" and list[i + 3][j] == "[X]" and list[i + 4][j] == "[X]") {
+					end = true;
+					cout << "X win!" << "verticle starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+				if (list[i][j] == "[O]" and list[i + 1][j] == "[O]" and list[i + 2][j] == "[O]" and list[i + 3][j] == "[O]" and list[i + 4][j] == "[O]") {
+					end = true;
+					cout << "O win!" << "verticle starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+			}
+		}
+
+		// down right win list[y][x] = list[i][j]
+		for (int j = 0; j < w - 4; j++) {
+
+			for (int i = 0; i < l - 4; i++) {
+				if (list[i][j] == "[X]" and list[i + 1][j + 1] == "[X]" and list[i + 2][j + 2] == "[X]" and list[i + 3][j + 3] == "[X]" and list[i + 4][j + 4] == "[X]") {
+					end = true;
+					cout << "X win!" << "down right starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+				if (list[i][j] == "[O]" and list[i + 1][j + 1] == "[O]" and list[i + 2][j + 2] == "[O]" and list[i + 3][j + 3] == "[O]" and list[i + 4][j + 4] == "[O]") {
+					end = true;
+					cout << "O win!" << "down right starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+			}
+		}
+
+
+		// down left win list[y][x] = list[i][j]
+		for (int j = 4; j < w; j++) {
+
+			for (int i = 0; i < l - 4; i++) {
+				if (list[i][j] == "[X]" and list[i + 1][j - 1] == "[X]" and list[i + 2][j - 2] == "[X]" and list[i + 3][j - 3] == "[X]" and list[i + 4][j - 4] == "[X]") {
+					end = true;
+					cout << "X win!" << "down left starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+				if (list[i][j] == "[O]" and list[i + 1][j - 1] == "[O]" and list[i + 2][j - 2] == "[O]" and list[i + 3][j - 3] == "[O]" and list[i - 4][j - 4] == "[O]") {
+					end = true;
+					cout << "O win!" << "down left starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+			}
+		}
+
+		// up left win list[y][x] = list[i][j]
+		for (int j = 4; j < w; j++) {
+
+			for (int i = 4; i < l; i++) {
+				if (list[i][j] == "[X]" and list[i - 1][j - 1] == "[X]" and list[i - 2][j - 2] == "[X]" and list[i - 3][j - 3] == "[X]" and list[i - 4][j - 4] == "[X]") {
+					end = true;
+					cout << "X win!" << "up left starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+				if (list[i][j] == "[O]" and list[i - 1][j - 1] == "[O]" and list[i - 2][j - 2] == "[O]" and list[i - 3][j - 3] == "[O]" and list[i - 4][j - 4] == "[O]") {
+					end = true;
+					cout << "O win!" << "up left starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+			}
+		}
+
+		// up right win list[y][x] = list[i][j]
+		for (int j = 0; j < w - 4; j++) {
+
+			for (int i = 4; i < l; i++) {
+				if (list[i][j] == "[X]" and list[i - 1][j + 1] == "[X]" and list[i - 2][j + 2] == "[X]" and list[i - 3][j + 3] == "[X]" and list[i - 4][j + 4] == "[X]") {
+					end = true;
+					cout << "X win!" << "up right starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+				if (list[i][j] == "[O]" and list[i - 1][j + 1] == "[O]" and list[i - 2][j + 2] == "[O]" and list[i - 3][j + 3] == "[O]" and list[i - 4][j + 4] == "[O]") {
+					end = true;
+					cout << "O win!" << "up right starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+			}
+		}
+
+
+
+
+
+		// Printing again
+
+		/*
+		for (int i = 0; i < l; i++) {
+			if (i > 8) {
+				SetConsoleTextAttribute(hConsole, 7);
+				cout << i + 1 << " ";
+			}
+			else {
+				SetConsoleTextAttribute(hConsole, 7);
+				cout << " " << i + 1 << " ";
+			}
+		
+			for (int j = 0; j < w; j++) {
+				if (list[i][j] == "[X]") {
+					SetConsoleTextAttribute(hConsole, 14);
+					cout << list[i][j] << " ";
+				}
+				if (list[i][j] == "[O]") {
+					SetConsoleTextAttribute(hConsole, 11);
+					cout << list[i][j] << " ";
+				}
+				if (list[i][j] == "[ ]") {
+					SetConsoleTextAttribute(hConsole, 8);
+					cout << list[i][j] << " ";
+				}
+			}
+			cout << endl;
+			cout << endl;
+		}
+		*/
+		
+		
+
+
+
+
+
+
+		// J is X, I is Y
+
+		// J+ is right, I+ is down
+
+
+
+
+		bool s = false;
+		bool v = false;
+		bool ur = false;
+		bool dr = false;
+		bool ul = false;
+		bool dl = false;
+
+
+		
+		
+
+
+
+		// AI formula /////////////////////////////////////////////////////
+		double points[l][w] = {};
+		double close = 1;
+		double iso = 1;
+		double enemy = 1;
+		double self = 1;
+		double centre = 0;
+		double taken = 0;
+		double localpoints = 0;
+		
+
+
+
+				
+				for (int i = 0; i < l; i++) {
+
+					for (int j = 0; j < w; j++) {
+						if (list[i][j] == "[X]" or list[i][j] == "[O]") {
+							taken = 0;
+
+						}
+						else {
+							taken = 1;
+						}
+
+						int lenl = j;
+						int lenr = w - j;
+						int lenu = i;
+						int lend = l - i;
+						
+
+						int lenul = min(lenl,lenu);
+						int lenur = min(lenr, lenu);
+						int lendl = min(lenl, lend);
+						int lendr = min(lenr, lend);
+						localpoints = 0;
+						 
+						//cout << "lenr: " << lenr << endl;
+						
+						if (i == l / 2 and j == w / 2) {
+							localpoints += 0.01;
+						}
+					
+						
+						// Scan 4 Same 4/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+						// Scan 4 right
+						for (int t = 0; t < (lenr - 3); t++) {
+							if (list[i][j + t] == "[X]" and list[i][j + t + 1] == "[X]" and list[i][j + t + 2] == "[X]" and list[i][j + t + 3] == "[X]") {
+								localpoints += enemy * chain4same / (1 + (t * close));
+							}
+
+							if (list[i][j + t] == "[0]" and list[i][j + t + 1] == "[O]" and list[i][j + t + 2] == "[O]" and list[i][j + t + 3] == "[O]") {
+								localpoints += self * chain4same / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 left
+						for (int t = 0; t < (lenl - 3); t++) {
+							if (list[i][j - t] == "[X]" and list[i][j - t - 1] == "[X]" and list[i][j - t - 2] == "[X]" and list[i][j - t - 3] == "[X]") {
+								localpoints += enemy * chain4same / (1 + (t * close));
+							}
+
+							if (list[i][j - t] == "[0]" and list[i][j - t - 1] == "[O]" and list[i][j - t - 2] == "[O]" and list[i][j - t - 3] == "[O]") {
+								localpoints += self * chain4same / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up
+						for (int t = 0; t < (lenu - 3); t++) {
+							if (list[i - t][j] == "[X]" and list[i - t - 1][j] == "[X]" and list[i - t - 2][j] == "[X]" and list[i - t - 3][j] == "[X]") {
+								localpoints += enemy * chain4same / (1 + (t * close));
+							}
+
+							if (list[i - t][j] == "[0]" and list[i - t - 1][j] == "[O]" and list[i - t - 2][j] == "[O]" and list[i - t - 3][j] == "[O]") {
+								localpoints += self * chain4same / (1 + (t * close));
+							}
+						}
+
+						// Scan 4down
+						for (int t = 0; t < (lend - 3); t++) {
+							if (list[i + t][j] == "[X]" and list[i + t + 1][j] == "[X]" and list[i + t + 2][j] == "[X]" and list[i + t + 3][j] == "[X]") {
+								localpoints += enemy * chain4same / (1 + (t * close));
+							}
+
+							if (list[i + t][j] == "[0]" and list[i + t + 1][j] == "[O]" and list[i + t + 2][j] == "[O]" and list[i + t + 3][j] == "[O]") {
+								localpoints += self * chain4same / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up right
+						for (int t = 0; t < (lenur - 3); t++) {
+							if (list[i - t][j + t] == "[X]" and list[i - t - 1][j + t + 1] == "[X]" and list[i - t - 2][j + t + 2] == "[X]" and list[i - t - 3][j + t + 3] == "[X]") {
+								localpoints += chain4same * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j + t] == "[O]" and list[i - t - 1][j + t + 1] == "[O]" and list[i - t - 2][j + t + 2] == "[O]" and list[i - t - 3][j + t + 3] == "[O]") {
+								localpoints += chain4same * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up left
+						for (int t = 0; t < (lenul - 3); t++) {
+							if (list[i - t][j - t] == "[X]" and list[i - t - 1][j - t - 1] == "[X]" and list[i - t - 2][j - t - 2] == "[X]" and list[i - t - 3][j - t - 3] == "[X]") {
+								localpoints += chain4same * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j - t] == "[O]" and list[i - t - 1][j - t - 1] == "[O]" and list[i - t - 2][j - t - 2] == "[O]" and list[i - t - 3][j - t - 3] == "[O]") {
+								localpoints += chain4same * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down left
+						for (int t = 0; t < (lendl - 3); t++) {
+							if (list[i + t][j - t] == "[X]" and list[i + t + 1][j - t - 1] == "[X]" and list[i + t + 2][j - t - 2] == "[X]" and list[i + t + 3][j - t - 3] == "[X]") {
+								localpoints += chain4same * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j - t] == "[O]" and list[i + t + 1][j - t - 1] == "[O]" and list[i + t + 2][j - t - 2] == "[O]" and list[i + t + 3][j - t - 3] == "[O]") {
+								localpoints += chain4same * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down right
+						for (int t = 0; t < (lendr - 3); t++) {
+							if (list[i + t][j + t] == "[X]" and list[i + t + 1][j + t + 1] == "[X]" and list[i + t + 2][j + t + 2] == "[X]" and list[i + t + 3][j + t + 3] == "[X]") {
+								localpoints += chain4same * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j + t] == "[O]" and list[i + t + 1][j + t + 1] == "[O]" and list[i + t + 2][j + t + 2] == "[O]" and list[i + t + 3][j + t + 3] == "[O]") {
+								localpoints += chain4same * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 Same 3 Block 1/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+						// Scan 4 right
+						for (int t = 0; t < (lenr - 3); t++) {
+							if (list[i][j + t] == "[X]" and list[i][j + t + 1] == "[X]" and list[i][j + t + 2] == "[X]" and list[i][j + t + 3] == "[O]") {
+								localpoints += enemy * chain3same1block / (1 + (t * close));
+							}
+
+							if (list[i][j + t] == "[0]" and list[i][j + t + 1] == "[O]" and list[i][j + t + 2] == "[O]" and list[i][j + t + 3] == "[X]") {
+								localpoints += self * chain3same1block / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 left
+						for (int t = 0; t < (lenl - 3); t++) {
+							if (list[i][j - t] == "[X]" and list[i][j - t - 1] == "[X]" and list[i][j - t - 2] == "[X]" and list[i][j - t - 3] == "[O]") {
+								localpoints += enemy * chain3same1block / (1 + (t * close));
+							}
+
+							if (list[i][j - t] == "[0]" and list[i][j - t - 1] == "[O]" and list[i][j - t - 2] == "[O]" and list[i][j - t - 3] == "[X]") {
+								localpoints += self * chain3same1block / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up
+						for (int t = 0; t < (lenu - 3); t++) {
+							if (list[i - t][j] == "[X]" and list[i - t - 1][j] == "[X]" and list[i - t - 2][j] == "[X]" and list[i - t - 3][j] == "[O]") {
+								localpoints += enemy * chain3same1block / (1 + (t * close));
+							}
+
+							if (list[i - t][j] == "[0]" and list[i - t - 1][j] == "[O]" and list[i - t - 2][j] == "[O]" and list[i - t - 3][j] == "[X]") {
+								localpoints += self * chain3same1block / (1 + (t * close));
+							}
+						}
+
+						// Scan 4down
+						for (int t = 0; t < (lend - 3); t++) {
+							if (list[i + t][j] == "[X]" and list[i + t + 1][j] == "[X]" and list[i + t + 2][j] == "[X]" and list[i + t + 3][j] == "[O]") {
+								localpoints += enemy * chain3same1block / (1 + (t * close));
+							}
+
+							if (list[i + t][j] == "[0]" and list[i + t + 1][j] == "[O]" and list[i + t + 2][j] == "[O]" and list[i + t + 3][j] == "[X]") {
+								localpoints += self * chain3same1block / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up right
+						for (int t = 0; t < (lenur - 3); t++) {
+							if (list[i - t][j + t] == "[X]" and list[i - t - 1][j + t + 1] == "[X]" and list[i - t - 2][j + t + 2] == "[X]" and list[i - t - 3][j + t + 3] == "[O]") {
+								localpoints += chain3same1block * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j + t] == "[O]" and list[i - t - 1][j + t + 1] == "[O]" and list[i - t - 2][j + t + 2] == "[O]" and list[i - t - 3][j + t + 3] == "[X]") {
+								localpoints += chain3same1block * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up left
+						for (int t = 0; t < (lenul - 3); t++) {
+							if (list[i - t][j - t] == "[X]" and list[i - t - 1][j - t - 1] == "[X]" and list[i - t - 2][j - t - 2] == "[X]" and list[i - t - 3][j - t - 3] == "[O]") {
+								localpoints += chain3same1block * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j - t] == "[O]" and list[i - t - 1][j - t - 1] == "[O]" and list[i - t - 2][j - t - 2] == "[O]" and list[i - t - 3][j - t - 3] == "[X]") {
+								localpoints += chain3same1block * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down left
+						for (int t = 0; t < (lendl - 3); t++) {
+							if (list[i + t][j - t] == "[X]" and list[i + t + 1][j - t - 1] == "[X]" and list[i + t + 2][j - t - 2] == "[X]" and list[i + t + 3][j - t - 3] == "[O]") {
+								localpoints += chain3same1block * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j - t] == "[O]" and list[i + t + 1][j - t - 1] == "[O]" and list[i + t + 2][j - t - 2] == "[O]" and list[i + t + 3][j - t - 3] == "[X]") {
+								localpoints += chain3same1block * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down right
+						for (int t = 0; t < (lendr - 3); t++) {
+							if (list[i + t][j + t] == "[X]" and list[i + t + 1][j + t + 1] == "[X]" and list[i + t + 2][j + t + 2] == "[X]" and list[i + t + 3][j + t + 3] == "[O]") {
+								localpoints += chain3same1block * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j + t] == "[O]" and list[i + t + 1][j + t + 1] == "[O]" and list[i + t + 2][j + t + 2] == "[O]" and list[i + t + 3][j + t + 3] == "[X]") {
+								localpoints += chain3same1block * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 Same 3 Free 1/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+						// Scan 4 right
+						for (int t = 0; t < (lenr - 3); t++) {
+							if (list[i][j + t] == "[X]" and list[i][j + t + 1] == "[X]" and list[i][j + t + 2] == "[X]" and list[i][j + t + 3] == "[ ]") {
+								localpoints += enemy * chain3same1free / (1 + (t * close));
+							}
+
+							if (list[i][j + t] == "[0]" and list[i][j + t + 1] == "[O]" and list[i][j + t + 2] == "[O]" and list[i][j + t + 3] == "[ ]") {
+								localpoints += self * chain3same1free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 left
+						for (int t = 0; t < (lenl - 3); t++) {
+							if (list[i][j - t] == "[X]" and list[i][j - t - 1] == "[X]" and list[i][j - t - 2] == "[X]" and list[i][j - t - 3] == "[ ]") {
+								localpoints += enemy * chain3same1free / (1 + (t * close));
+							}
+
+							if (list[i][j - t] == "[0]" and list[i][j - t - 1] == "[O]" and list[i][j - t - 2] == "[O]" and list[i][j - t - 3] == "[ ]") {
+								localpoints += self * chain3same1free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up
+						for (int t = 0; t < (lenu - 3); t++) {
+							if (list[i - t][j] == "[X]" and list[i - t - 1][j] == "[X]" and list[i - t - 2][j] == "[X]" and list[i - t - 3][j] == "[ ]") {
+								localpoints += enemy * chain3same1free / (1 + (t * close));
+							}
+
+							if (list[i - t][j] == "[0]" and list[i - t - 1][j] == "[O]" and list[i - t - 2][j] == "[O]" and list[i - t - 3][j] == "[ ]") {
+								localpoints += self * chain3same1free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4down
+						for (int t = 0; t < (lend - 3); t++) {
+							if (list[i + t][j] == "[X]" and list[i + t + 1][j] == "[X]" and list[i + t + 2][j] == "[X]" and list[i + t + 3][j] == "[ ]") {
+								localpoints += enemy * chain3same1free / (1 + (t * close));
+							}
+
+							if (list[i + t][j] == "[0]" and list[i + t + 1][j] == "[O]" and list[i + t + 2][j] == "[O]" and list[i + t + 3][j] == "[ ]") {
+								localpoints += self * chain3same1free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up right
+						for (int t = 0; t < (lenur - 3); t++) {
+							if (list[i - t][j + t] == "[X]" and list[i - t - 1][j + t + 1] == "[X]" and list[i - t - 2][j + t + 2] == "[X]" and list[i - t - 3][j + t + 3] == "[ ]") {
+								localpoints += chain3same1free * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j + t] == "[O]" and list[i - t - 1][j + t + 1] == "[O]" and list[i - t - 2][j + t + 2] == "[O]" and list[i - t - 3][j + t + 3] == "[ ]") {
+								localpoints += chain3same1free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up left
+						for (int t = 0; t < (lenul - 3); t++) {
+							if (list[i - t][j - t] == "[X]" and list[i - t - 1][j - t - 1] == "[X]" and list[i - t - 2][j - t - 2] == "[X]" and list[i - t - 3][j - t - 3] == "[ ]") {
+								localpoints += chain3same1free * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j - t] == "[O]" and list[i - t - 1][j - t - 1] == "[O]" and list[i - t - 2][j - t - 2] == "[O]" and list[i - t - 3][j - t - 3] == "[ ]") {
+								localpoints += chain3same1free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down left
+						for (int t = 0; t < (lendl - 3); t++) {
+							if (list[i + t][j - t] == "[X]" and list[i + t + 1][j - t - 1] == "[X]" and list[i + t + 2][j - t - 2] == "[X]" and list[i + t + 3][j - t - 3] == "[ ]") {
+								localpoints += chain3same1free * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j - t] == "[O]" and list[i + t + 1][j - t - 1] == "[O]" and list[i + t + 2][j - t - 2] == "[O]" and list[i + t + 3][j - t - 3] == "[ ]") {
+								localpoints += chain3same1free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down right
+						for (int t = 0; t < (lendr - 3); t++) {
+							if (list[i + t][j + t] == "[X]" and list[i + t + 1][j + t + 1] == "[X]" and list[i + t + 2][j + t + 2] == "[X]" and list[i + t + 3][j + t + 3] == "[ ]") {
+								localpoints += chain3same1free * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j + t] == "[O]" and list[i + t + 1][j + t + 1] == "[O]" and list[i + t + 2][j + t + 2] == "[O]" and list[i + t + 3][j + t + 3] == "[ ]") {
+								localpoints += chain3same1free * self / (1 + (t * close));
+							}
+						}
+
+
+
+						// Scan 4 Same 2 Block 2/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+						// Scan 4 right
+						for (int t = 0; t < (lenr - 3); t++) {
+							if (list[i][j + t] == "[X]" and list[i][j + t + 1] == "[X]" and list[i][j + t + 2] == "[O]" and list[i][j + t + 3] == "[O]") {
+								localpoints += enemy * chain2same2block / (1 + (t * close));
+							}
+
+							if (list[i][j + t] == "[0]" and list[i][j + t + 1] == "[O]" and list[i][j + t + 2] == "[X]" and list[i][j + t + 3] == "[X]") {
+								localpoints += self * chain2same2block / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 left
+						for (int t = 0; t < (lenl - 3); t++) {
+							if (list[i][j - t] == "[X]" and list[i][j - t - 1] == "[X]" and list[i][j - t - 2] == "[O]" and list[i][j - t - 3] == "[O]") {
+								localpoints += enemy * chain2same2block / (1 + (t * close));
+							}
+
+							if (list[i][j - t] == "[0]" and list[i][j - t - 1] == "[O]" and list[i][j - t - 2] == "[X]" and list[i][j - t - 3] == "[X]") {
+								localpoints += self * chain2same2block / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up
+						for (int t = 0; t < (lenu - 3); t++) {
+							if (list[i - t][j] == "[X]" and list[i - t - 1][j] == "[X]" and list[i - t - 2][j] == "[O]" and list[i - t - 3][j] == "[O]") {
+								localpoints += enemy * chain2same2block / (1 + (t * close));
+							}
+
+							if (list[i - t][j] == "[0]" and list[i - t - 1][j] == "[O]" and list[i - t - 2][j] == "[X]" and list[i - t - 3][j] == "[X]") {
+								localpoints += self * chain2same2block / (1 + (t * close));
+							}
+						}
+
+						// Scan 4down
+						for (int t = 0; t < (lend - 3); t++) {
+							if (list[i + t][j] == "[X]" and list[i + t + 1][j] == "[X]" and list[i + t + 2][j] == "[O]" and list[i + t + 3][j] == "[O]") {
+								localpoints += enemy * chain2same2block / (1 + (t * close));
+							}
+
+							if (list[i + t][j] == "[0]" and list[i + t + 1][j] == "[O]" and list[i + t + 2][j] == "[X]" and list[i + t + 3][j] == "[X]") {
+								localpoints += self * chain2same2block / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up right
+						for (int t = 0; t < (lenur - 3); t++) {
+							if (list[i - t][j + t] == "[X]" and list[i - t - 1][j + t + 1] == "[X]" and list[i - t - 2][j + t + 2] == "[O]" and list[i - t - 3][j + t + 3] == "[O]") {
+								localpoints += chain2same2block * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j + t] == "[O]" and list[i - t - 1][j + t + 1] == "[O]" and list[i - t - 2][j + t + 2] == "[X]" and list[i - t - 3][j + t + 3] == "[X]") {
+								localpoints += chain2same2block * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up left
+						for (int t = 0; t < (lenul - 3); t++) {
+							if (list[i - t][j - t] == "[X]" and list[i - t - 1][j - t - 1] == "[X]" and list[i - t - 2][j - t - 2] == "[O]" and list[i - t - 3][j - t - 3] == "[O]") {
+								localpoints += chain2same2block * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j - t] == "[O]" and list[i - t - 1][j - t - 1] == "[O]" and list[i - t - 2][j - t - 2] == "[X]" and list[i - t - 3][j - t - 3] == "[X]") {
+								localpoints += chain2same2block * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down left
+						for (int t = 0; t < (lendl - 3); t++) {
+							if (list[i + t][j - t] == "[X]" and list[i + t + 1][j - t - 1] == "[X]" and list[i + t + 2][j - t - 2] == "[O]" and list[i + t + 3][j - t - 3] == "[O]") {
+								localpoints += chain2same2block * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j - t] == "[O]" and list[i + t + 1][j - t - 1] == "[O]" and list[i + t + 2][j - t - 2] == "[X]" and list[i + t + 3][j - t - 3] == "[X]") {
+								localpoints += chain2same2block * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down right
+						for (int t = 0; t < (lendr - 3); t++) {
+							if (list[i + t][j + t] == "[X]" and list[i + t + 1][j + t + 1] == "[X]" and list[i + t + 2][j + t + 2] == "[O]" and list[i + t + 3][j + t + 3] == "[O]") {
+								localpoints += chain2same2block * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j + t] == "[O]" and list[i + t + 1][j + t + 1] == "[O]" and list[i + t + 2][j + t + 2] == "[X]" and list[i + t + 3][j + t + 3] == "[X]") {
+								localpoints += chain2same2block * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 Same 2 Free 2/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+						// Scan 4 right
+						for (int t = 0; t < (lenr - 3); t++) {
+							if (list[i][j + t] == "[X]" and list[i][j + t + 1] == "[X]" and list[i][j + t + 2] == "[ ]" and list[i][j + t + 3] == "[ ]") {
+								localpoints += enemy * chain2same2free / (1 + (t * close));
+							}
+
+							if (list[i][j + t] == "[0]" and list[i][j + t + 1] == "[O]" and list[i][j + t + 2] == "[ ]" and list[i][j + t + 3] == "[ ]") {
+								localpoints += self * chain2same2free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 left
+						for (int t = 0; t < (lenl - 3); t++) {
+							if (list[i][j - t] == "[X]" and list[i][j - t - 1] == "[X]" and list[i][j - t - 2] == "[ ]" and list[i][j - t - 3] == "[ ]") {
+								localpoints += enemy * chain2same2free / (1 + (t * close));
+							}
+
+							if (list[i][j - t] == "[0]" and list[i][j - t - 1] == "[O]" and list[i][j - t - 2] == "[ ]" and list[i][j - t - 3] == "[ ]") {
+								localpoints += self * chain2same2free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up
+						for (int t = 0; t < (lenu - 3); t++) {
+							if (list[i - t][j] == "[X]" and list[i - t - 1][j] == "[X]" and list[i - t - 2][j] == "[ ]" and list[i - t - 3][j] == "[ ]") {
+								localpoints += enemy * chain2same2free / (1 + (t * close));
+							}
+
+							if (list[i - t][j] == "[0]" and list[i - t - 1][j] == "[O]" and list[i - t - 2][j] == "[ ]" and list[i - t - 3][j] == "[ ]") {
+								localpoints += self * chain2same2free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4down
+						for (int t = 0; t < (lend - 3); t++) {
+							if (list[i + t][j] == "[X]" and list[i + t + 1][j] == "[X]" and list[i + t + 2][j] == "[ ]" and list[i + t + 3][j] == "[ ]") {
+								localpoints += enemy * chain2same2free / (1 + (t * close));
+							}
+
+							if (list[i + t][j] == "[0]" and list[i + t + 1][j] == "[O]" and list[i + t + 2][j] == "[ ]" and list[i + t + 3][j] == "[ ]") {
+								localpoints += self * chain2same2free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up right
+						for (int t = 0; t < (lenur - 3); t++) {
+							if (list[i - t][j + t] == "[X]" and list[i - t - 1][j + t + 1] == "[X]" and list[i - t - 2][j + t + 2] == "[ ]" and list[i - t - 3][j + t + 3] == "[ ]") {
+								localpoints += chain2same2free * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j + t] == "[O]" and list[i - t - 1][j + t + 1] == "[O]" and list[i - t - 2][j + t + 2] == "[ ]" and list[i - t - 3][j + t + 3] == "[ ]") {
+								localpoints += chain2same2free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up left
+						for (int t = 0; t < (lenul - 3); t++) {
+							if (list[i - t][j - t] == "[X]" and list[i - t - 1][j - t - 1] == "[X]" and list[i - t - 2][j - t - 2] == "[ ]" and list[i - t - 3][j - t - 3] == "[ ]") {
+								localpoints += chain2same2free * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j - t] == "[O]" and list[i - t - 1][j - t - 1] == "[O]" and list[i - t - 2][j - t - 2] == "[ ]" and list[i - t - 3][j - t - 3] == "[ ]") {
+								localpoints += chain2same2free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down left
+						for (int t = 0; t < (lendl - 3); t++) {
+							if (list[i + t][j - t] == "[X]" and list[i + t + 1][j - t - 1] == "[X]" and list[i + t + 2][j - t - 2] == "[ ]" and list[i + t + 3][j - t - 3] == "[ ]") {
+								localpoints += chain2same2free * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j - t] == "[O]" and list[i + t + 1][j - t - 1] == "[O]" and list[i + t + 2][j - t - 2] == "[ ]" and list[i + t + 3][j - t - 3] == "[ ]") {
+								localpoints += chain2same2free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down right
+						for (int t = 0; t < (lendr - 3); t++) {
+							if (list[i + t][j + t] == "[X]" and list[i + t + 1][j + t + 1] == "[X]" and list[i + t + 2][j + t + 2] == "[ ]" and list[i + t + 3][j + t + 3] == "[ ]") {
+								localpoints += chain2same2free * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j + t] == "[O]" and list[i + t + 1][j + t + 1] == "[O]" and list[i + t + 2][j + t + 2] == "[ ]" and list[i + t + 3][j + t + 3] == "[ ]") {
+								localpoints += chain2same2free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 Same 2 Free 1 Block 1/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+						// Scan 4 right
+						for (int t = 0; t < (lenr - 3); t++) {
+							if (list[i][j + t] == "[X]" and list[i][j + t + 1] == "[X]" and list[i][j + t + 2] == "[ ]" and list[i][j + t + 3] == "[O]") {
+								localpoints += enemy * chain2same1free1block / (1 + (t * close));
+							}
+
+							if (list[i][j + t] == "[0]" and list[i][j + t + 1] == "[O]" and list[i][j + t + 2] == "[ ]" and list[i][j + t + 3] == "[X]") {
+								localpoints += self * chain2same1free1block / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 left
+						for (int t = 0; t < (lenl - 3); t++) {
+							if (list[i][j - t] == "[X]" and list[i][j - t - 1] == "[X]" and list[i][j - t - 2] == "[ ]" and list[i][j - t - 3] == "[O]") {
+								localpoints += enemy * chain2same1free1block / (1 + (t * close));
+							}
+
+							if (list[i][j - t] == "[0]" and list[i][j - t - 1] == "[O]" and list[i][j - t - 2] == "[ ]" and list[i][j - t - 3] == "[X]") {
+								localpoints += self * chain2same1free1block / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up
+						for (int t = 0; t < (lenu - 3); t++) {
+							if (list[i - t][j] == "[X]" and list[i - t - 1][j] == "[X]" and list[i - t - 2][j] == "[ ]" and list[i - t - 3][j] == "[O]") {
+								localpoints += enemy * chain2same1free1block / (1 + (t * close));
+							}
+
+							if (list[i - t][j] == "[0]" and list[i - t - 1][j] == "[O]" and list[i - t - 2][j] == "[ ]" and list[i - t - 3][j] == "[X]") {
+								localpoints += self * chain2same1free1block / (1 + (t * close));
+							}
+						}
+
+						// Scan 4down
+						for (int t = 0; t < (lend - 3); t++) {
+							if (list[i + t][j] == "[X]" and list[i + t + 1][j] == "[X]" and list[i + t + 2][j] == "[ ]" and list[i + t + 3][j] == "[O]") {
+								localpoints += enemy * chain2same1free1block / (1 + (t * close));
+							}
+
+							if (list[i + t][j] == "[0]" and list[i + t + 1][j] == "[O]" and list[i + t + 2][j] == "[ ]" and list[i + t + 3][j] == "[X]") {
+								localpoints += self * chain2same1free1block / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up right
+						for (int t = 0; t < (lenur - 3); t++) {
+							if (list[i - t][j + t] == "[X]" and list[i - t - 1][j + t + 1] == "[X]" and list[i - t - 2][j + t + 2] == "[ ]" and list[i - t - 3][j + t + 3] == "[O]") {
+								localpoints += chain2same1free1block * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j + t] == "[O]" and list[i - t - 1][j + t + 1] == "[O]" and list[i - t - 2][j + t + 2] == "[ ]" and list[i - t - 3][j + t + 3] == "[X]") {
+								localpoints += chain2same1free1block * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up left
+						for (int t = 0; t < (lenul - 3); t++) {
+							if (list[i - t][j - t] == "[X]" and list[i - t - 1][j - t - 1] == "[X]" and list[i - t - 2][j - t - 2] == "[ ]" and list[i - t - 3][j - t - 3] == "[O]") {
+								localpoints += chain2same1free1block * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j - t] == "[O]" and list[i - t - 1][j - t - 1] == "[O]" and list[i - t - 2][j - t - 2] == "[ ]" and list[i - t - 3][j - t - 3] == "[X]") {
+								localpoints += chain2same1free1block * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down left
+						for (int t = 0; t < (lendl - 3); t++) {
+							if (list[i + t][j - t] == "[X]" and list[i + t + 1][j - t - 1] == "[X]" and list[i + t + 2][j - t - 2] == "[ ]" and list[i + t + 3][j - t - 3] == "[O]") {
+								localpoints += chain2same1free1block * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j - t] == "[O]" and list[i + t + 1][j - t - 1] == "[O]" and list[i + t + 2][j - t - 2] == "[ ]" and list[i + t + 3][j - t - 3] == "[X]") {
+								localpoints += chain2same1free1block * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down right
+						for (int t = 0; t < (lendr - 3); t++) {
+							if (list[i + t][j + t] == "[X]" and list[i + t + 1][j + t + 1] == "[X]" and list[i + t + 2][j + t + 2] == "[ ]" and list[i + t + 3][j + t + 3] == "[O]") {
+								localpoints += chain2same1free1block * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j + t] == "[O]" and list[i + t + 1][j + t + 1] == "[O]" and list[i + t + 2][j + t + 2] == "[ ]" and list[i + t + 3][j + t + 3] == "[X]") {
+								localpoints += chain2same1free1block * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 Same 2  Block 1 Free 1/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+						// Scan 4 right
+						for (int t = 0; t < (lenr - 3); t++) {
+							if (list[i][j + t] == "[X]" and list[i][j + t + 1] == "[X]" and list[i][j + t + 2] == "[O]" and list[i][j + t + 3] == "[ ]") {
+								localpoints += enemy * chain2same1block1free / (1 + (t * close));
+							}
+
+							if (list[i][j + t] == "[0]" and list[i][j + t + 1] == "[O]" and list[i][j + t + 2] == "[X]" and list[i][j + t + 3] == "[ ]") {
+								localpoints += self * chain2same1block1free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 left
+						for (int t = 0; t < (lenl - 3); t++) {
+							if (list[i][j - t] == "[X]" and list[i][j - t - 1] == "[X]" and list[i][j - t - 2] == "[O]" and list[i][j - t - 3] == "[ ]") {
+								localpoints += enemy * chain2same1block1free / (1 + (t * close));
+							}
+
+							if (list[i][j - t] == "[0]" and list[i][j - t - 1] == "[O]" and list[i][j - t - 2] == "[X]" and list[i][j - t - 3] == "[ ]") {
+								localpoints += self * chain2same1block1free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up
+						for (int t = 0; t < (lenu - 3); t++) {
+							if (list[i - t][j] == "[X]" and list[i - t - 1][j] == "[X]" and list[i - t - 2][j] == "[O]" and list[i - t - 3][j] == "[ ]") {
+								localpoints += enemy * chain2same1block1free / (1 + (t * close));
+							}
+
+							if (list[i - t][j] == "[0]" and list[i - t - 1][j] == "[O]" and list[i - t - 2][j] == "[X]" and list[i - t - 3][j] == "[ ]") {
+								localpoints += self * chain2same1block1free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4down
+						for (int t = 0; t < (lend - 3); t++) {
+							if (list[i + t][j] == "[X]" and list[i + t + 1][j] == "[X]" and list[i + t + 2][j] == "[O]" and list[i + t + 3][j] == "[ ]") {
+								localpoints += enemy * chain2same1block1free / (1 + (t * close));
+							}
+
+							if (list[i + t][j] == "[0]" and list[i + t + 1][j] == "[O]" and list[i + t + 2][j] == "[X]" and list[i + t + 3][j] == "[ ]") {
+								localpoints += self * chain2same1block1free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up right
+						for (int t = 0; t < (lenur - 3); t++) {
+							if (list[i - t][j + t] == "[X]" and list[i - t - 1][j + t + 1] == "[X]" and list[i - t - 2][j + t + 2] == "[O]" and list[i - t - 3][j + t + 3] == "[ ]") {
+								localpoints += chain2same1block1free * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j + t] == "[O]" and list[i - t - 1][j + t + 1] == "[O]" and list[i - t - 2][j + t + 2] == "[X]" and list[i - t - 3][j + t + 3] == "[ ]") {
+								localpoints += chain2same1block1free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up left
+						for (int t = 0; t < (lenul - 3); t++) {
+							if (list[i - t][j - t] == "[X]" and list[i - t - 1][j - t - 1] == "[X]" and list[i - t - 2][j - t - 2] == "[O]" and list[i - t - 3][j - t - 3] == "[ ]") {
+								localpoints += chain2same1block1free * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j - t] == "[O]" and list[i - t - 1][j - t - 1] == "[O]" and list[i - t - 2][j - t - 2] == "[X]" and list[i - t - 3][j - t - 3] == "[ ]") {
+								localpoints += chain2same1block1free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down left
+						for (int t = 0; t < (lendl - 3); t++) {
+							if (list[i + t][j - t] == "[X]" and list[i + t + 1][j - t - 1] == "[X]" and list[i + t + 2][j - t - 2] == "[O]" and list[i + t + 3][j - t - 3] == "[ ]") {
+								localpoints += chain2same1block1free * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j - t] == "[O]" and list[i + t + 1][j - t - 1] == "[O]" and list[i + t + 2][j - t - 2] == "[X]" and list[i + t + 3][j - t - 3] == "[ ]") {
+								localpoints += chain2same1block1free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down right
+						for (int t = 0; t < (lendr - 3); t++) {
+							if (list[i + t][j + t] == "[X]" and list[i + t + 1][j + t + 1] == "[X]" and list[i + t + 2][j + t + 2] == "[O]" and list[i + t + 3][j + t + 3] == "[ ]") {
+								localpoints += chain2same1block1free * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j + t] == "[O]" and list[i + t + 1][j + t + 1] == "[O]" and list[i + t + 2][j + t + 2] == "[X]" and list[i + t + 3][j + t + 3] == "[ ]") {
+								localpoints += chain2same1block1free * self / (1 + (t * close));
+							}
+						}
+
+
+						// Scan 4 Single 2 block 1 free /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+						// Scan 4 right
+						for (int t = 0; t < (lenr - 3); t++) {
+							if (list[i][j + t] == "[X]" and list[i][j + t + 1] == "[O]" and list[i][j + t + 2] == "[O]" and list[i][j + t + 3] == "[ ]") {
+								localpoints += enemy * single2block1free / (1 + (t * close));
+							}
+
+							if (list[i][j + t] == "[0]" and list[i][j + t + 1] == "[X]" and list[i][j + t + 2] == "[X]" and list[i][j + t + 3] == "[ ]") {
+								localpoints += self * single2block1free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 left
+						for (int t = 0; t < (lenl - 3); t++) {
+							if (list[i][j - t] == "[X]" and list[i][j - t - 1] == "[O]" and list[i][j - t - 2] == "[O]" and list[i][j - t - 3] == "[ ]") {
+								localpoints += enemy * single2block1free / (1 + (t * close));
+							}
+
+							if (list[i][j - t] == "[0]" and list[i][j - t - 1] == "[X]" and list[i][j - t - 2] == "[X]" and list[i][j - t - 3] == "[ ]") {
+								localpoints += self * single2block1free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up
+						for (int t = 0; t < (lenu - 3); t++) {
+							if (list[i - t][j] == "[X]" and list[i - t - 1][j] == "[O]" and list[i - t - 2][j] == "[O]" and list[i - t - 3][j] == "[ ]") {
+								localpoints += enemy * single2block1free / (1 + (t * close));
+							}
+
+							if (list[i - t][j] == "[0]" and list[i - t - 1][j] == "[X]" and list[i - t - 2][j] == "[X]" and list[i - t - 3][j] == "[ ]") {
+								localpoints += self * single2block1free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4down
+						for (int t = 0; t < (lend - 3); t++) {
+							if (list[i + t][j] == "[X]" and list[i + t + 1][j] == "[O]" and list[i + t + 2][j] == "[O]" and list[i + t + 3][j] == "[ ]") {
+								localpoints += enemy * single2block1free / (1 + (t * close));
+							}
+
+							if (list[i + t][j] == "[0]" and list[i + t + 1][j] == "[X]" and list[i + t + 2][j] == "[X]" and list[i + t + 3][j] == "[ ]") {
+								localpoints += self * single2block1free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up right
+						for (int t = 0; t < (lenur - 3); t++) {
+							if (list[i - t][j + t] == "[X]" and list[i - t - 1][j + t + 1] == "[O]" and list[i - t - 2][j + t + 2] == "[O]" and list[i - t - 3][j + t + 3] == "[ ]") {
+								localpoints += single2block1free * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j + t] == "[O]" and list[i - t - 1][j + t + 1] == "[X]" and list[i - t - 2][j + t + 2] == "[X]" and list[i - t - 3][j + t + 3] == "[ ]") {
+								localpoints += single2block1free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up left
+						for (int t = 0; t < (lenul - 3); t++) {
+							if (list[i - t][j - t] == "[X]" and list[i - t - 1][j - t - 1] == "[O]" and list[i - t - 2][j - t - 2] == "[O]" and list[i - t - 3][j - t - 3] == "[ ]") {
+								localpoints += single2block1free * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j - t] == "[O]" and list[i - t - 1][j - t - 1] == "[X]" and list[i - t - 2][j - t - 2] == "[X]" and list[i - t - 3][j - t - 3] == "[ ]") {
+								localpoints += single2block1free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down left
+						for (int t = 0; t < (lendl - 3); t++) {
+							if (list[i + t][j - t] == "[X]" and list[i + t + 1][j - t - 1] == "[O]" and list[i + t + 2][j - t - 2] == "[O]" and list[i + t + 3][j - t - 3] == "[ ]") {
+								localpoints += single2block1free * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j - t] == "[O]" and list[i + t + 1][j - t - 1] == "[X]" and list[i + t + 2][j - t - 2] == "[X]" and list[i + t + 3][j - t - 3] == "[ ]") {
+								localpoints += single2block1free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down right
+						for (int t = 0; t < (lendr - 3); t++) {
+							if (list[i + t][j + t] == "[X]" and list[i + t + 1][j + t + 1] == "[O]" and list[i + t + 2][j + t + 2] == "[O]" and list[i + t + 3][j + t + 3] == "[ ]") {
+								localpoints += single2block1free * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j + t] == "[O]" and list[i + t + 1][j + t + 1] == "[X]" and list[i + t + 2][j + t + 2] == "[X]" and list[i + t + 3][j + t + 3] == "[ ]") {
+								localpoints += single2block1free * self / (1 + (t * close));
+							}
+						}
+
+
+						// Scan 4 Single 1 block 2 free /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+						// Scan 4 right
+						for (int t = 0; t < (lenr - 3); t++) {
+							if (list[i][j + t] == "[X]" and list[i][j + t + 1] == "[O]" and list[i][j + t + 2] == "[ ]" and list[i][j + t + 3] == "[ ]") {
+								localpoints += enemy * single1block2free / (1 + (t * close));
+							}
+
+							if (list[i][j + t] == "[0]" and list[i][j + t + 1] == "[X]" and list[i][j + t + 2] == "[ ]" and list[i][j + t + 3] == "[ ]") {
+								localpoints += self * single1block2free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 left
+						for (int t = 0; t < (lenl - 3); t++) {
+							if (list[i][j - t] == "[X]" and list[i][j - t - 1] == "[O]" and list[i][j - t - 2] == "[ ]" and list[i][j - t - 3] == "[ ]") {
+								localpoints += enemy * single1block2free / (1 + (t * close));
+							}
+
+							if (list[i][j - t] == "[0]" and list[i][j - t - 1] == "[X]" and list[i][j - t - 2] == "[ ]" and list[i][j - t - 3] == "[ ]") {
+								localpoints += self * single1block2free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up
+						for (int t = 0; t < (lenu - 3); t++) {
+							if (list[i - t][j] == "[X]" and list[i - t - 1][j] == "[O]" and list[i - t - 2][j] == "[ ]" and list[i - t - 3][j] == "[ ]") {
+								localpoints += enemy * single1block2free / (1 + (t * close));
+							}
+
+							if (list[i - t][j] == "[0]" and list[i - t - 1][j] == "[X]" and list[i - t - 2][j] == "[ ]" and list[i - t - 3][j] == "[ ]") {
+								localpoints += self * single1block2free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4down
+						for (int t = 0; t < (lend - 3); t++) {
+							if (list[i + t][j] == "[X]" and list[i + t + 1][j] == "[O]" and list[i + t + 2][j] == "[ ]" and list[i + t + 3][j] == "[ ]") {
+								localpoints += enemy * single1block2free / (1 + (t * close));
+							}
+
+							if (list[i + t][j] == "[0]" and list[i + t + 1][j] == "[X]" and list[i + t + 2][j] == "[ ]" and list[i + t + 3][j] == "[ ]") {
+								localpoints += self * single1block2free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up right
+						for (int t = 0; t < (lenur - 3); t++) {
+							if (list[i - t][j + t] == "[X]" and list[i - t - 1][j + t + 1] == "[O]" and list[i - t - 2][j + t + 2] == "[ ]" and list[i - t - 3][j + t + 3] == "[ ]") {
+								localpoints += single1block2free * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j + t] == "[O]" and list[i - t - 1][j + t + 1] == "[X]" and list[i - t - 2][j + t + 2] == "[ ]" and list[i - t - 3][j + t + 3] == "[ ]") {
+								localpoints += single1block2free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up left
+						for (int t = 0; t < (lenul - 3); t++) {
+							if (list[i - t][j - t] == "[X]" and list[i - t - 1][j - t - 1] == "[O]" and list[i - t - 2][j - t - 2] == "[ ]" and list[i - t - 3][j - t - 3] == "[ ]") {
+								localpoints += single1block2free * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j - t] == "[O]" and list[i - t - 1][j - t - 1] == "[X]" and list[i - t - 2][j - t - 2] == "[ ]" and list[i - t - 3][j - t - 3] == "[ ]") {
+								localpoints += single1block2free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down left
+						for (int t = 0; t < (lendl - 3); t++) {
+							if (list[i + t][j - t] == "[X]" and list[i + t + 1][j - t - 1] == "[O]" and list[i + t + 2][j - t - 2] == "[ ]" and list[i + t + 3][j - t - 3] == "[ ]") {
+								localpoints += single1block2free * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j - t] == "[O]" and list[i + t + 1][j - t - 1] == "[X]" and list[i + t + 2][j - t - 2] == "[ ]" and list[i + t + 3][j - t - 3] == "[ ]") {
+								localpoints += single1block2free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down right
+						for (int t = 0; t < (lendr - 3); t++) {
+							if (list[i + t][j + t] == "[X]" and list[i + t + 1][j + t + 1] == "[O]" and list[i + t + 2][j + t + 2] == "[ ]" and list[i + t + 3][j + t + 3] == "[ ]") {
+								localpoints += single1block2free * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j + t] == "[O]" and list[i + t + 1][j + t + 1] == "[X]" and list[i + t + 2][j + t + 2] == "[ ]" and list[i + t + 3][j + t + 3] == "[ ]") {
+								localpoints += single1block2free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 single3free /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+						// Scan 4 right
+						for (int t = 0; t < (lenr - 3); t++) {
+							if (list[i][j + t] == "[X]" and list[i][j + t + 1] == "[ ]" and list[i][j + t + 2] == "[ ]" and list[i][j + t + 3] == "[ ]") {
+								localpoints += enemy * single3free / (1 + (t * close));
+							}
+
+							if (list[i][j + t] == "[0]" and list[i][j + t + 1] == "[ ]" and list[i][j + t + 2] == "[ ]" and list[i][j + t + 3] == "[ ]") {
+								localpoints += self * single3free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 left
+						for (int t = 0; t < (lenl - 3); t++) {
+							if (list[i][j - t] == "[X]" and list[i][j - t - 1] == "[ ]" and list[i][j - t - 2] == "[ ]" and list[i][j - t - 3] == "[ ]") {
+								localpoints += enemy * single3free / (1 + (t * close));
+							}
+
+							if (list[i][j - t] == "[0]" and list[i][j - t - 1] == "[ ]" and list[i][j - t - 2] == "[ ]" and list[i][j - t - 3] == "[ ]") {
+								localpoints += self * single3free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up
+						for (int t = 0; t < (lenu - 3); t++) {
+							if (list[i - t][j] == "[X]" and list[i - t - 1][j] == "[ ]" and list[i - t - 2][j] == "[ ]" and list[i - t - 3][j] == "[ ]") {
+								localpoints += enemy * single3free / (1 + (t * close));
+							}
+
+							if (list[i - t][j] == "[0]" and list[i - t - 1][j] == "[ ]" and list[i - t - 2][j] == "[ ]" and list[i - t - 3][j] == "[ ]") {
+								localpoints += self * single3free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4down
+						for (int t = 0; t < (lend - 3); t++) {
+							if (list[i + t][j] == "[X]" and list[i + t + 1][j] == "[ ]" and list[i + t + 2][j] == "[ ]" and list[i + t + 3][j] == "[ ]") {
+								localpoints += enemy * single3free / (1 + (t * close));
+							}
+
+							if (list[i + t][j] == "[0]" and list[i + t + 1][j] == "[ ]" and list[i + t + 2][j] == "[ ]" and list[i + t + 3][j] == "[ ]") {
+								localpoints += self * single3free / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up right
+						for (int t = 0; t < (lenur - 3); t++) {
+							if (list[i - t][j + t] == "[X]" and list[i - t - 1][j + t + 1] == "[ ]" and list[i - t - 2][j + t + 2] == "[ ]" and list[i - t - 3][j + t + 3] == "[ ]") {
+								localpoints += single3free * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j + t] == "[O]" and list[i - t - 1][j + t + 1] == "[ ]" and list[i - t - 2][j + t + 2] == "[ ]" and list[i - t - 3][j + t + 3] == "[ ]") {
+								localpoints += single3free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 up left
+						for (int t = 0; t < (lenul - 3); t++) {
+							if (list[i - t][j - t] == "[X]" and list[i - t - 1][j - t - 1] == "[ ]" and list[i - t - 2][j - t - 2] == "[ ]" and list[i - t - 3][j - t - 3] == "[ ]") {
+								localpoints += single3free * enemy / (1 + (t * close));
+							}
+
+							if (list[i - t][j - t] == "[O]" and list[i - t - 1][j - t - 1] == "[ ]" and list[i - t - 2][j - t - 2] == "[ ]" and list[i - t - 3][j - t - 3] == "[ ]") {
+								localpoints += single3free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down left
+						for (int t = 0; t < (lendl - 3); t++) {
+							if (list[i + t][j - t] == "[X]" and list[i + t + 1][j - t - 1] == "[ ]" and list[i + t + 2][j - t - 2] == "[ ]" and list[i + t + 3][j - t - 3] == "[ ]") {
+								localpoints += single3free * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j - t] == "[O]" and list[i + t + 1][j - t - 1] == "[ ]" and list[i + t + 2][j - t - 2] == "[ ]" and list[i + t + 3][j - t - 3] == "[ ]") {
+								localpoints += single3free * self / (1 + (t * close));
+							}
+						}
+
+						// Scan 4 down right
+						for (int t = 0; t < (lendr - 3); t++) {
+							if (list[i + t][j + t] == "[X]" and list[i + t + 1][j + t + 1] == "[ ]" and list[i + t + 2][j + t + 2] == "[ ]" and list[i + t + 3][j + t + 3] == "[ ]") {
+								localpoints += single3free * enemy / (1 + (t * close));
+							}
+
+							if (list[i + t][j + t] == "[O]" and list[i + t + 1][j + t + 1] == "[ ]" and list[i + t + 2][j + t + 2] == "[ ]" and list[i + t + 3][j + t + 3] == "[ ]") {
+								localpoints += single3free * self / (1 + (t * close));
+							}
+						}
+
+						
+						
+						points[i][j] = localpoints * taken;
+					}
+				}
+				
+
+				int aplacex = 0;
+				int aplacey = 0;
+				double highest = 0;
+				for (int i = 0; i < l; i++) {
+
+					for (int j = 0; j < w; j++) {
+						if (points[i][j] >= highest) {
+							aplacey = i;
+							aplacex = j;
+							highest = points[i][j];
+							//cout << points[i][j] << endl;
+						}
+						
+					}
+				}
+				if(check == true){
+					list[aplacey][aplacex] = "[O]";
+				}
+				
+			
+		
+
+				// Printing again
+
+				for (int i = 0; i < l; i++) {
+					if (i > 8) {
+						SetConsoleTextAttribute(hConsole, 7);
+						cout << i + 1 << " ";
+					}
+					else {
+						SetConsoleTextAttribute(hConsole, 7);
+						cout << " " << i + 1 << " ";
+					}
+
+					for (int j = 0; j < w; j++) {
+						cout << " " << points[i][j] << "  ";
+					}
+					cout << endl;
+					cout << endl;
+				}
+
+
+
+
+
+
+				// Header
+				SetConsoleTextAttribute(hConsole, 7);
+				cout << "   ";
+				for (int i = 1; i < w + 1; i++) {
+
+					int number = i;
+
+					if (number == 10) {
+
+						cout << to_string(number) << " ";
+					}
+
+					if (number > 10) {
+
+						cout << " " << to_string(number) << " ";
+					}
+
+					if (number < 10) {
+
+						cout << " " << to_string(number) << "  ";
+					}
+
+
+
+				}
+				cout << endl;
+
+
+
+
+
+
+
+
+
+
+
+		for (int i = 0; i < l; i++) {
+			if (i > 8) {
+				SetConsoleTextAttribute(hConsole, 7);
+				cout << i + 1 << " ";
+			}
+			else {
+				SetConsoleTextAttribute(hConsole, 7);
+				cout << " " << i + 1 << " ";
+			}
+
+			for (int j = 0; j < w; j++) {
+				if (list[i][j] == "[X]") {
+					SetConsoleTextAttribute(hConsole, 14);
+					cout << list[i][j] << " ";
+				}
+				if (list[i][j] == "[O]") {
+					SetConsoleTextAttribute(hConsole, 11);
+					cout << list[i][j] << " ";
+				}
+				if (list[i][j] == "[ ]") {
+					SetConsoleTextAttribute(hConsole, 8);
+					cout << list[i][j] << " ";
+				}
+			}
+			cout << endl;
+			cout << endl;
+		}
+
+
+		
+		
+		// Sideways win
+
+		for (int i = 0; i < l; i++) {
+
+			for (int j = 0; j < w - 4; j++) {
+				if (list[i][j] == "[X]" and list[i][j + 1] == "[X]" and list[i][j + 2] == "[X]" and list[i][j + 3] == "[X]" and list[i][j + 4] == "[X]") {
+					end = true;
+					cout << "X win!" << "sideways starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+				if (list[i][j] == "[O]" and list[i][j + 1] == "[O]" and list[i][j + 2] == "[O]" and list[i][j + 3] == "[O]" and list[i][j + 4] == "[O]") {
+					end = true;
+					cout << "O win!" << "sideways starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+			}
+		}
+
+		//Vert win list[y][x]
+		for (int j = 0; j < w; j++) {
+
+			for (int i = 0; i < l - 4; i++) {
+				if (list[i][j] == "[X]" and list[i + 1][j] == "[X]" and list[i + 2][j] == "[X]" and list[i + 3][j] == "[X]" and list[i + 4][j] == "[X]") {
+					end = true;
+					cout << "X win!" << "verticle starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+				if (list[i][j] == "[O]" and list[i + 1][j] == "[O]" and list[i + 2][j] == "[O]" and list[i + 3][j] == "[O]" and list[i + 4][j] == "[O]") {
+					end = true;
+					cout << "O win!" << "verticle starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+			}
+		}
+
+		// down right win list[y][x] = list[i][j]
+		for (int j = 0; j < w - 4; j++) {
+
+			for (int i = 0; i < l - 4; i++) {
+				if (list[i][j] == "[X]" and list[i + 1][j + 1] == "[X]" and list[i + 2][j + 2] == "[X]" and list[i + 3][j + 3] == "[X]" and list[i + 4][j + 4] == "[X]") {
+					end = true;
+					cout << "X win!" << "down right starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+				if (list[i][j] == "[O]" and list[i + 1][j + 1] == "[O]" and list[i + 2][j + 2] == "[O]" and list[i + 3][j + 3] == "[O]" and list[i + 4][j + 4] == "[O]") {
+					end = true;
+					cout << "O win!" << "down right starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+			}
+		}
+
+
+		// down left win list[y][x] = list[i][j]
+		for (int j = 4; j < w; j++) {
+
+			for (int i = 0; i < l - 4; i++) {
+				if (list[i][j] == "[X]" and list[i + 1][j - 1] == "[X]" and list[i + 2][j - 2] == "[X]" and list[i + 3][j - 3] == "[X]" and list[i + 4][j - 4] == "[X]") {
+					end = true;
+					cout << "X win!" << "down left starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+				if (list[i][j] == "[O]" and list[i + 1][j - 1] == "[O]" and list[i + 2][j - 2] == "[O]" and list[i + 3][j - 3] == "[O]" and list[i - 4][j - 4] == "[O]") {
+					end = true;
+					cout << "O win!" << "down left starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+			}
+		}
+
+		// up left win list[y][x] = list[i][j]
+		for (int j = 4; j < w; j++) {
+
+			for (int i = 4; i < l; i++) {
+				if (list[i][j] == "[X]" and list[i - 1][j - 1] == "[X]" and list[i - 2][j - 2] == "[X]" and list[i - 3][j - 3] == "[X]" and list[i - 4][j - 4] == "[X]") {
+					end = true;
+					cout << "X win!" << "up left starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+				if (list[i][j] == "[O]" and list[i - 1][j - 1] == "[O]" and list[i - 2][j - 2] == "[O]" and list[i - 3][j - 3] == "[O]" and list[i - 4][j - 4] == "[O]") {
+					end = true;
+					cout << "O win!" << "up left starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+			}
+		}
+
+		// up right win list[y][x] = list[i][j]
+		for (int j = 0; j < w - 4; j++) {
+
+			for (int i = 4; i < l; i++) {
+				if (list[i][j] == "[X]" and list[i - 1][j + 1] == "[X]" and list[i - 2][j + 2] == "[X]" and list[i - 3][j + 3] == "[X]" and list[i - 4][j + 4] == "[X]") {
+					end = true;
+					cout << "X win!" << "up right starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+				if (list[i][j] == "[O]" and list[i - 1][j + 1] == "[O]" and list[i - 2][j + 2] == "[O]" and list[i - 3][j + 3] == "[O]" and list[i - 4][j + 4] == "[O]") {
+					end = true;
+					cout << "O win!" << "up right starting at X: " << j + 1 << " and Y:" << i + 1 << endl;
+				}
+			}
+		}
+
+
+
+
+
+
+
+
+	}
+}
+
+
